@@ -1,5 +1,6 @@
 
 import streamlit as st
+st.write("App started successfully")
 from rag import answer_query
 from vector_store import init_store
 from embeddings import embed_text
