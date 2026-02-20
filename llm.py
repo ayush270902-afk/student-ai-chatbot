@@ -1,16 +1,22 @@
 
-from llama_cpp import Llama
+from groq import Groq
+import os
 
-llm = Llama(
-    model_path="models/mistral-7b-instruct.gguf",
-    n_ctx=2048,
-    n_threads=4
-)
+# Initialize Groq client using Streamlit Secrets
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
-def generate(prompt):
-    output = llm(
-        prompt,
-        max_tokens=512,
-        stop=["</s>"]
+def generate(prompt: str) -> str:
+    """
+    Generate response using Groq-hosted LLM
+    """
+    response = client.chat.completions.create(
+        model="llama-3.1-8b-instant",
+        messages=[
+            {"role": "system", "content": "You are a helpful student assistant."},
+            {"role": "user", "content": prompt}
+        ],
+        temperature=0.3,
+        max_tokens=512
     )
-    return output["choices"][0]["text"]
+
+    return response.choices[0].message.content
