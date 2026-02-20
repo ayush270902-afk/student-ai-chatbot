@@ -1,7 +1,10 @@
 
-from sentence_transformers import SentenceTransformer
+import numpy as np
+import hashlib
 
-model = SentenceTransformer("all-MiniLM-L6-v2")
-
-def embed_text(text):
-    return model.encode(text)
+def embed_text(text: str) -> np.ndarray:
+    """
+    Lightweight deterministic embedding (cloud-safe)
+    """
+    h = hashlib.sha256(text.encode()).digest()
+    return np.frombuffer(h, dtype=np.uint8).astype("float32")
