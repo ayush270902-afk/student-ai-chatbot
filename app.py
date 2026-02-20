@@ -1,13 +1,15 @@
 
 import streamlit as st
 from rag import answer_query
+from vector_store import init_store
+from embeddings import embed_text
 
-st.set_page_config(page_title="Student AI Chatbot")
-st.title("🎓 Student AI Chatbot (Local LLaMA)")
+init_store(embed_text)
 
-query = st.text_input("Ask a student-related question")
+st.title("Student AI Chatbot")
 
-if st.button("Ask") and query:
+query = st.text_input("Ask a question")
+
+if query:
     with st.spinner("Thinking..."):
-        response = answer_query(query)
-    st.write(response)
+        st.write(answer_query(query))
