@@ -1,7 +1,5 @@
 
 streamlit
-sentence-transformers
-faiss-cpu
-llama-cpp-python
 numpy
+llama-cpp-python
 
