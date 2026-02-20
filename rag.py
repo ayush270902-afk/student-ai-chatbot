@@ -26,7 +26,6 @@ Context:
 
 Question:
 {query}
-
 Answer:
 """
 
