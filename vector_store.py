@@ -1,18 +1,24 @@
 
-import faiss
 import numpy as np
 
-documents = [
-    "Newton's laws describe motion in physics",
-    "Photosynthesis occurs in chloroplasts",
-    "Machine learning learns patterns from data",
-    "Data structures organize data efficiently"
+DOCUMENTS = [
+    "Python is a programming language",
+    "Machine learning is a subset of AI",
+    "Streamlit is used to build web apps",
+    "RAG stands for Retrieval Augmented Generation"
 ]
 
-vectors = np.random.rand(len(documents), 384).astype("float32")
-index = faiss.IndexFlatL2(384)
-index.add(vectors)
+DOC_EMBEDDINGS = []
 
-def search_docs(query_vec):
-    D, I = index.search(np.array([query_vec]).astype("float32"), 2)
-    return [documents[i] for i in I[0]]
+def init_store(embed_fn):
+    global DOC_EMBEDDINGS
+    DOC_EMBEDDINGS = [embed_fn(doc) for doc in DOCUMENTS]
+
+def search_docs(query_embedding, top_k=2):
+    sims = []
+    for emb in DOC_EMBEDDINGS:
+        sim = np.dot(query_embedding, emb)
+        sims.append(sim)
+
+    top_indices = np.argsort(sims)[-top_k:]
+    return [DOCUMENTS[i] for i in top_indices]
